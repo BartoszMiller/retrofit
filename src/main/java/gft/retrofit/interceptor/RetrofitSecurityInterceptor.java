@@ -12,6 +12,10 @@ public class RetrofitSecurityInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
 
         Request request = chain.request();
-        return chain.proceed(request);
+
+        Request.Builder requestBuilder = request.newBuilder().addHeader("Authorization-Header", "auth-value");
+        Request authorizedRequest = requestBuilder.build();
+
+        return chain.proceed(authorizedRequest);
     }
 }
