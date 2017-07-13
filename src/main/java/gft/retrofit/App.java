@@ -2,6 +2,8 @@ package gft.retrofit;
 
 import gft.retrofit.client.GitHubClient;
 import gft.retrofit.client.HttpBinClient;
+import gft.retrofit.interceptor.RetrofitSecurityInterceptor;
+import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,11 +25,17 @@ public class App {
     private String gitHubUrl;
 
     @Bean
+    public OkHttpClient okHttpClient() {
+        return new OkHttpClient.Builder().addInterceptor(new RetrofitSecurityInterceptor()).build();
+    }
+
+    @Bean
     public Retrofit retrofitHttpBin() {
 
         return new Retrofit.Builder()
                 .addConverterFactory(JacksonConverterFactory.create())
                 .baseUrl(httpBinUrl)
+                .client(okHttpClient())
                 .build();
     }
 
@@ -37,6 +45,7 @@ public class App {
         return new Retrofit.Builder()
                 .addConverterFactory(JacksonConverterFactory.create())
                 .baseUrl(gitHubUrl)
+                .client(okHttpClient())
                 .build();
     }
 
