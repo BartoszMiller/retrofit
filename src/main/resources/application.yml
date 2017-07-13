@@ -1,0 +1,4 @@
+api:
+  url:
+    httpBin: http://httpbin.org/
+    gitHub: https://api.github.com

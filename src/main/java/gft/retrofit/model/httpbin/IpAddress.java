@@ -1,4 +1,4 @@
-package gft.model;
+package gft.retrofit.model.httpbin;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

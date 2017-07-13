@@ -1,5 +1,8 @@
 package gft.retrofit;
 
+import gft.retrofit.client.GitHubClient;
+import gft.retrofit.client.HttpBinClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -13,17 +16,37 @@ public class App {
         SpringApplication.run(App.class, args);
     }
 
+    @Value("${api.url.httpBin}")
+    private String httpBinUrl;
+
+    @Value("${api.url.gitHub}")
+    private String gitHubUrl;
+
     @Bean
-    public Retrofit retrofit() {
+    public Retrofit retrofitHttpBin() {
 
         return new Retrofit.Builder()
                 .addConverterFactory(JacksonConverterFactory.create())
-                .baseUrl("http://httpbin.org/")
+                .baseUrl(httpBinUrl)
                 .build();
     }
 
     @Bean
-    public RdsClient rdsClient(Retrofit retrofit) {
-        return retrofit.create(RdsClient.class);
+    public Retrofit retrofitGitHub() {
+
+        return new Retrofit.Builder()
+                .addConverterFactory(JacksonConverterFactory.create())
+                .baseUrl(gitHubUrl)
+                .build();
+    }
+
+    @Bean
+    public HttpBinClient httpBinClient() {
+        return retrofitHttpBin().create(HttpBinClient.class);
+    }
+
+    @Bean
+    public GitHubClient gitHubClient() {
+        return retrofitGitHub().create(GitHubClient.class);
     }
 }
